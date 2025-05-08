@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
 
     if (jwt === undefined) return NextResponse.redirect(new URL('/login', request.url));
     try {
-        const { payload } = await jwtVerify(jwt, new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_DECODING));
+        const { payload } = await jwtVerify(jwt, new TextEncoder().encode(process.env.JWT_SECRET));
         if (payload.isVerified === false) return NextResponse.redirect(new URL('/waiting/verify', request.url)); /// HERE SHOULD BE THE NEW URL OF WAITING VERIFY VIEW
         if(payload.status === false) return NextResponse.redirect(new URL('/waiting/status', request.url)) /// Here should go to anyone is not verified from us
     } catch (error) {
