@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
 
 export const metadata: Metadata = {
-  title: "NacPatin",
-  description: "Esta es una pagina web de patin profesora Natalia Ciardello Anahi para la utilizacion de un sistema de pago y usuarios, etc",
+  title: "NacPatin User Settings",
+  description: "En esta pagina podras editar la configuracion de tu perfil",
 };
 
 export default function RootLayout({

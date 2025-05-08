@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NacPatin",
-  description: "Esta es una pagina web de patin profesora Natalia Ciardello Anahi para la utilizacion de un sistema de pago y usuarios, etc",
+  title: "NacPatin Esperando Verificacion",
+  description: "En esta url estas esperando a que te llegue el mail para verificar tu cuenta",
 };
 
 export default function RootLayout({
@@ -12,6 +12,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <section>{children}</section>
+    <section>
+      {children}
+    </section>
   );
 }
