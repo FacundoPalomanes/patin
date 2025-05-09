@@ -1,25 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-// Rutas públicas que no necesitan autenticación
 const publicRoutes = [
   '/login',
   '/waiting/verify',
   '/waiting/status',
-  '/favicon.ico', // opcional: evitar errores con favicon
+  '/favicon.ico',
 ];
 
 export async function middleware(request: NextRequest) {
+  console.log("Middleware running for:", request.nextUrl.pathname);
+
   const { pathname } = request.nextUrl;
 
-  // Permitir acceso si es una ruta pública
   if (publicRoutes.some(route => pathname.startsWith(route))) {
+    console.log("Public route allowed:", pathname);
     return NextResponse.next();
   }
 
   const jwt = request.cookies.get("user")?.value;
 
   if (!jwt) {
+    console.log("No JWT found, redirecting to login");
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
@@ -29,11 +31,13 @@ export async function middleware(request: NextRequest) {
       new TextEncoder().encode(process.env.JWT_SECRET)
     );
 
+    console.log("JWT payload:", payload);
+
     if (!payload.isVerified) {
       return NextResponse.redirect(new URL('/waiting/verify', request.url));
     }
 
-    if (!payload.status) {
+    if (payload.status !== true) {
       return NextResponse.redirect(new URL('/waiting/status', request.url));
     }
 
@@ -43,7 +47,6 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 }
-
 
 export const config = {
 //   matcher: ['/', '/add', '/settings'],
