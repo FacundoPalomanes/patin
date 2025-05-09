@@ -32,8 +32,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  //   matcher: ['/', '/add', '/settings'],
-  matcher: []
+    matcher: ['/', '/add', '/settings']
 };
 
 // para hacer todas las rutas adentro de una ruta es '/carpeta/:path*' eso significa q todas las rutas anidadas de esa carpeta estan protegidas por el middleware`
