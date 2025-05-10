@@ -1,28 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
-import { jwtVerify } from "jose";
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  if (['/login', '/waiting/verify', '/waiting/status', '/favicon.ico'].includes(pathname)) {
+    return NextResponse.next();
+  }
+
   try {
-    const { pathname } = request.nextUrl;
+    const response = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/auth/cookiesProfile`, {
+      headers: {
+        cookie: request.headers.get("cookie") || "", // reenviamos cookies manualmente
+      },
+      credentials: "include",
+    });
 
-    console.log('pathname: ',pathname)
+    if (!response.ok) throw new Error("Not authenticated");
 
-    if(['/login', '/waiting/verify', '/waiting/status', '/favicon.ico'].includes(pathname)) NextResponse.next();
+    const data = await response.json();
 
-    const jwt = request.cookies.get("user")?.value;
-    if (!jwt) {
-      console.log("No JWT found, redirecting to login");
-      return NextResponse.redirect(new URL('/login', request.url));
+    if (!data.isVerified) {
+      return NextResponse.redirect(new URL('/waiting/verify', request.url));
     }
 
-    const { payload } = await jwtVerify(jwt, new TextEncoder().encode(process.env.JWT_SECRET));
-    if (!payload) {
-      console.log("There was an error doing payload");
-      return NextResponse.redirect(new URL('/login', request.url));
+    if (!data.status) {
+      return NextResponse.redirect(new URL('/waiting/status', request.url));
     }
-
-    if (!payload.isVerified) return NextResponse.redirect(new URL('/waiting/verify', request.url));
-    if (payload.status) return NextResponse.redirect(new URL('/waiting/status', request.url));
 
     return NextResponse.next();
   } catch (error) {
@@ -32,7 +35,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/', '/add', '/settings']
+  matcher: ['/', '/add', '/settings'],
 };
-
-// para hacer todas las rutas adentro de una ruta es '/carpeta/:path*' eso significa q todas las rutas anidadas de esa carpeta estan protegidas por el middleware`
