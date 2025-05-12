@@ -16,7 +16,7 @@ const robotoMono = Roboto_Mono({
 
 export const metadata: Metadata = {
   title: "NacPatin",
-  description: "Página oficial de la profesora de patín Natalia Ciardello Anahí. Accedé a tu perfil, gestioná pagos, clases y usuarios desde un sistema simple, seguro y personalizado.",
+  description: "Página oficial de la profesora de patín Natalia Ciardello Anahí, para utilizacion de posts sobre clases o otras cosas.",
 };
 
 export default function RootLayout({
