@@ -157,12 +157,12 @@ export default function Home() {
 
     if (calculateAge(birthDate) < 18) {
       if (!responsibleName || responsibleName.length < 3) {
-      setButtonStatusRegister('error');
-      return setError("Debes ingresar el nombre del adulto responsable.");
+        setButtonStatusRegister('error');
+        return setError("Debes ingresar el nombre del adulto responsable.");
       }
       if (!responsiblePhone || responsiblePhone.length < 8) {
-      setButtonStatusRegister('error');
-      return setError("Debes ingresar un teléfono válido del adulto responsable.");
+        setButtonStatusRegister('error');
+        return setError("Debes ingresar un teléfono válido del adulto responsable.");
       }
     }
 

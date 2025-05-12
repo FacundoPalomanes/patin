@@ -1,39 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
+import { jwtVerify } from "jose";
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
 
-  if (['/login', '/waiting/verify', '/waiting/status', '/favicon.ico'].includes(pathname)) {
-    return NextResponse.next();
-  }
+    const jwtCookie = request.cookies.get("user");
+    const jwt = jwtCookie?.value; // <-- extraer valor del cookie
 
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_FETCH_URL}/auth/cookiesProfile`, {
-      headers: {
-        cookie: request.headers.get("cookie") || "", // reenviamos cookies manualmente
-      },
-      credentials: "include",
-    });
-
-    if (!response.ok) throw new Error("Not authenticated");
-
-    const data = await response.json();
-
-    if (!data.isVerified) {
-      return NextResponse.redirect(new URL('/waiting/verify', request.url));
+    if (jwt === undefined) return NextResponse.redirect(new URL('/login', request.url));
+    try {
+        const { payload } = await jwtVerify(jwt, new TextEncoder().encode(process.env.JWT_SECRET));
+        if (payload.isVerified === false) return NextResponse.redirect(new URL('/waiting/verify', request.url)); /// HERE SHOULD BE THE NEW URL OF WAITING VERIFY VIEW
+        if(payload.status === false) return NextResponse.redirect(new URL('/waiting/status', request.url)) /// Here should go to anyone is not verified from us
+    } catch (error) {
+        console.log(error)
+        return NextResponse.redirect(new URL('/login', request.url));
     }
-
-    if (!data.status) {
-      return NextResponse.redirect(new URL('/waiting/status', request.url));
-    }
-
+    console.log(request.nextUrl)
     return NextResponse.next();
-  } catch (error) {
-    console.error("JWT verification failed:", error);
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
 }
 
 export const config = {
-  matcher: ['/', '/add', '/settings'],
-};
+    matcher: ['/', '/settings', '/add']
+}

@@ -24,7 +24,7 @@ export default defineConfig([
 
       // Optional: añade reglas de hooks si usás useEffect, useCallback, etc.
       "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
+      "react-hooks/exhaustive-deps": "warn"
     },
     settings: {
       react: {
