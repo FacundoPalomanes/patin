@@ -132,7 +132,7 @@ export default function Navbar({ user }: NavbarProps) {
                                                         {notif.sender && (
                                                             <div className="flex items-start">
                                                                 <Image
-                                                                    src={`${user.photoURL}?cacheBust=${Date.now()}`}
+                                                                    src={`${notif.sender.photoURL}?cacheBust=${Date.now()}`}
                                                                     width={32}
                                                                     height={32}
                                                                     alt="Foto"
