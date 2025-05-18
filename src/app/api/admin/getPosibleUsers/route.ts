@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPotentialUsers } from "../../../../../libs/firebase/admin/admin";
 import { verifyToken } from "../../../../../libs/JWTVerify";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
 export async function GET(req: NextRequest) {
   try {
     // Verificar token pasando el objeto Request completo
+    urlMiddleware(req);
+
     const decoded = verifyToken(req);
 
     if (!decoded) {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { uploadPostsPhotos } from "../../../../../libs/cloudinary/cloudinary";
 import { uploadNewPost } from "../../../../../libs/firebase/posts/posts";
 import jwt from "jsonwebtoken";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
 export const config = {
   api: {
@@ -11,6 +12,7 @@ export const config = {
 
 export async function POST(req: NextRequest) {
   try {
+    urlMiddleware(req)
     const token = req.cookies.get("user")?.value;
 
     if (!token) {

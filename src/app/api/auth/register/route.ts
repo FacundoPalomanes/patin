@@ -1,6 +1,7 @@
 import { addUserToDB, addImageToDB } from "../../../../../libs/firebase/auth/auth";
 import serializeCookie from "../../../../../libs/serializeCookies";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
 interface RegisterFields {
   name: string;
@@ -20,8 +21,9 @@ export const config = {
   },
 };
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    urlMiddleware(req);
     const formData = await req.formData();
 
     const fields: RegisterFields = {

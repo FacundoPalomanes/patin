@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { setNewAdmin } from "../../../../../libs/firebase/admin/admin";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
 // Definir una interfaz que extiende JwtPayload
 interface CustomJwtPayload extends jwt.JwtPayload {
@@ -9,6 +10,7 @@ interface CustomJwtPayload extends jwt.JwtPayload {
 
 export async function POST(req: NextRequest) {
   try {
+    urlMiddleware(req);
     const { userId } = await req.json();
     const token = req.cookies.get("user")?.value;
 

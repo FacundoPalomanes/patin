@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { getUsers } from "../../../../../libs/firebase/notifications/notifications";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
 export async function GET(req: NextRequest) {
   try {
+    urlMiddleware(req);
     const token = req.cookies.get("user")?.value;
     if (!token) return NextResponse.json({ error: "No token" }, { status: 401 });
 

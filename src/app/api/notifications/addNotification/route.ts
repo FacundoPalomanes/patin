@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { postNotification } from "../../../../../libs/firebase/notifications/notifications";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
 export const config = {
   api: {
@@ -10,6 +11,7 @@ export const config = {
 
 export async function POST(req: NextRequest) {
   try {
+    urlMiddleware(req);
     const token = req.cookies.get("user")?.value;
     if (!token) return NextResponse.json({ error: "No token" }, { status: 401 });
 

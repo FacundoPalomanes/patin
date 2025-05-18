@@ -1,6 +1,9 @@
 import { serialize } from "cookie";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
+import { NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  urlMiddleware(req);
   const serialized = serialize("user", "", {
     httpOnly: true,
     secure: true,

@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { logIn, logInGetUserDB } from "../../../../../libs/firebase/auth/auth";
 import serializeCookie from "../../../../../libs/serializeCookies";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
 export async function POST(req: NextRequest) {
+  urlMiddleware(req);
   const body = await req.formData();
   const email = body.get("email")?.toString();
   const password = body.get("password")?.toString();

@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requestEmailChange } from "../../../../../libs/firebase/user/user";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
 export async function POST(req: NextRequest) {
   try {
+    urlMiddleware(req);
     const { email, newEmail, password } = await req.json();
 
     await requestEmailChange(email, newEmail, password);

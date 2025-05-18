@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { uploadUser } from "../../../../../libs/firebase/user/user";
 import { updatePhoto } from "../../../../../libs/cloudinary/cloudinary";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
 export const config = {
   api: {
@@ -26,6 +27,7 @@ interface FileLike {
 
 export async function POST(req: NextRequest) {
   try {
+    urlMiddleware(req);
     const token = req.cookies.get("user")?.value;
     if (!token)
       return NextResponse.json({ error: "No token" }, { status: 401 });

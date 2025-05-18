@@ -2,9 +2,12 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { verifyEmail, logInGetUserDB } from "../../../../../libs/firebase/auth/auth";
 import serializeCookie from "../../../../../libs/serializeCookies";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
+import { NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    urlMiddleware(req);
     const token = (await cookies()).get("user")?.value;
     if (!token) {
       return new Response(JSON.stringify({ message: "Token no proporcionado" }), { status: 401 });

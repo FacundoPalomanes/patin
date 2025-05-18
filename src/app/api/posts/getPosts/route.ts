@@ -1,10 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getAllPostsOrdered } from "../../../../../libs/firebase/posts/posts";
 import { verifyToken } from "../../../../../libs/JWTVerify";
+import { urlMiddleware } from "../../../../../libs/urlMiddleware";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
-    const isVerified = await verifyToken(req);
+    urlMiddleware(req)
+    const isVerified = verifyToken(req);
     if (!isVerified) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
